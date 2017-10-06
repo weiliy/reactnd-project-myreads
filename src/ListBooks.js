@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 function Bookshelf(props) {
-  const { shelf, books } = props;
+  const { shelf, books, onChangeBookShelf } = props;
 
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{shelf}</h2>
       <div className="bookshelf-books">
         <ol className="books-grid">
-          {(books.map(({title, authors, imageLinks: {thumbnail: cover}, shelf }) => (
-            <li key={title}>
-              <Book {...{ title, authors, cover, shelf }}/>
+          {(books.map(book => (
+            <li key={book.id}>
+              <Book
+                book={book}
+                onChangeShelf={onChangeBookShelf}
+              />
             </li>
           )))}
         </ol>
@@ -19,38 +22,46 @@ function Bookshelf(props) {
   );
 }
 
-function Book(props) {
-  const { title, authors, cover, shelf } = props;
+class Book extends Component {
 
-  return (
-    <div className="book">
-      <div className="book-top">
-        <div
-          className="book-cover"
-          style={{
-            width: 128,
-            height: 192,
-            backgroundImage: `url(${cover}`,
-          }}
-        />
-        <div className="book-shelf-changer">
-          <select value={shelf} onChange={e => console.log(e.target.value)}>
-            <option value="none" disabled>Move to...</option>
-            <option value="currentlyReading">Currently Reading</option>
-            <option value="wantToRead">Want to Read</option>
-            <option value="read">Read</option>
-            <option value="none">None</option>
-          </select>
+  changeShelf = (e) => {
+    const { onChangeShelf, book } = this.props;
+    console.log(`change to ${e.target.value}`);
+    onChangeShelf(book, e.target.value);
+  }
+  render() {
+    const { book: {title, authors, imageLinks: { thumbnail: cover }, shelf } } = this.props;
+
+    return (
+      <div className="book">
+        <div className="book-top">
+          <div
+            className="book-cover"
+            style={{
+              width: 128,
+              height: 192,
+              backgroundImage: `url(${cover}`,
+            }}
+          />
+          <div className="book-shelf-changer">
+            <select value={shelf} onChange={this.changeShelf}>
+              <option value="none" disabled>Move to...</option>
+              <option value="currentlyReading">Currently Reading</option>
+              <option value="wantToRead">Want to Read</option>
+              <option value="read">Read</option>
+              <option value="none">None</option>
+            </select>
+          </div>
         </div>
+        <div className="book-title">{title}</div>
+        <div className="book-authors">{authors.join(', ')}</div>
       </div>
-      <div className="book-title">{title}</div>
-      <div className="book-authors">{authors.join(', ')}</div>
-    </div>
-  );
+    );
+  }
 }
 
 function ListBooks(props) {
-  const { books } = props;
+  const { books, onChangeBookShelf } = props;
 
   return (
     <div className="list-books">
@@ -62,14 +73,17 @@ function ListBooks(props) {
           <Bookshelf
             shelf="Currently Reading"
             books={books.filter(b => b.shelf === 'currentlyReading')}
+            onChangeBookShelf={onChangeBookShelf}
           />
           <Bookshelf
             shelf="Want to Read"
             books={books.filter(b => b.shelf === 'wantToRead')}
+            onChangeBookShelf={onChangeBookShelf}
           />
           <Bookshelf
             shelf="Read"
             books={books.filter(b => b.shelf === 'read')}
+            onChangeBookShelf={onChangeBookShelf}
           />
         </div>
       </div>
