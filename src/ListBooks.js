@@ -1,20 +1,16 @@
 import React from 'react';
 
 function Bookshelf(props) {
-  const { title, books } = props;
+  const { shelf, books } = props;
 
   return (
     <div className="bookshelf">
-      <h2 className="bookshelf-title">{title}</h2>
+      <h2 className="bookshelf-title">{shelf}</h2>
       <div className="bookshelf-books">
         <ol className="books-grid">
-          {(books.map((book) => (
-            <li key={book.title}>
-              <Book
-                title={book.title}
-                authors={book.authors.join(', ')}
-                cover={book.cover || `url(${book.imageLinks.thumbnail}`}
-              />
+          {(books.map(({title, authors, imageLinks: {thumbnail: cover}, shelf }) => (
+            <li key={title}>
+              <Book {...{ title, authors, cover, shelf }}/>
             </li>
           )))}
         </ol>
@@ -24,7 +20,7 @@ function Bookshelf(props) {
 }
 
 function Book(props) {
-  const { title, authors, cover } = props;
+  const { title, authors, cover, shelf } = props;
 
   return (
     <div className="book">
@@ -34,11 +30,11 @@ function Book(props) {
           style={{
             width: 128,
             height: 192,
-            backgroundImage: cover,
+            backgroundImage: `url(${cover}`,
           }}
         />
         <div className="book-shelf-changer">
-          <select>
+          <select value={shelf} onChange={e => console.log(e.target.value)}>
             <option value="none" disabled>Move to...</option>
             <option value="currentlyReading">Currently Reading</option>
             <option value="wantToRead">Want to Read</option>
@@ -48,7 +44,7 @@ function Book(props) {
         </div>
       </div>
       <div className="book-title">{title}</div>
-      <div className="book-authors">{authors}</div>
+      <div className="book-authors">{authors.join(', ')}</div>
     </div>
   );
 }
@@ -64,15 +60,15 @@ function ListBooks(props) {
       <div className="list-books-content">
         <div>
           <Bookshelf
-            title="Currently Reading"
+            shelf="Currently Reading"
             books={books.filter(b => b.shelf === 'currentlyReading')}
           />
           <Bookshelf
-            title="Want to Read"
+            shelf="Want to Read"
             books={books.filter(b => b.shelf === 'wantToRead')}
           />
           <Bookshelf
-            title="Read"
+            shelf="Read"
             books={books.filter(b => b.shelf === 'read')}
           />
         </div>
