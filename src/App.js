@@ -17,14 +17,11 @@ class BooksApp extends React.Component {
   }
 
   updateBook = (book, shelf) => {
-    console.log(book.title);
     book.shelf = shelf;
-    this.setState(state => {
-      const books = state.books.filter((b) => b.id !== book.id);
-      books.push(book);
-      return { books };
-    });
-    BooksAPI.update(book, shelf);
+    BooksAPI.update(book, shelf)
+      .then(() => this.setState(state => ({
+          books: state.books.filter((b) => b.id !== book.id).concat(book),
+      })));
   }
 
   render() {
