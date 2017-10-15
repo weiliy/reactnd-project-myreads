@@ -39,6 +39,7 @@ class BooksApp extends React.Component {
           )} />
           <Route path="/search" render={() => (
             <SearchBooks
+              allBooks={books}
               onChangeBookShelf={this.updateBook}
             />
           )} />

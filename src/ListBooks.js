@@ -13,7 +13,10 @@ function Bookshelf(props) {
           {(books.map(book => (
             <li key={book.id}>
               <Book
-                book={book}
+                title={book.title}
+                authors={book.authors || []}
+                cover={book.imageLinks ? book.imageLinks.thumbnail : 'http://via.placeholder.com/128x193?text=No%20Cover'}
+                shelf={book.shelf || 'none'}
                 onChangeShelf={shelf => onChangeBookShelf(book, shelf)}
               />
             </li>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Book extends Component {
 
@@ -7,7 +8,8 @@ class Book extends Component {
   }
 
   render() {
-    const { book: {title, authors, imageLinks: { thumbnail: cover }, shelf = 'none' } } = this.props;
+    console.log('book:', this.props);
+    const { title, authors, cover, shelf } = this.props;
 
     return (
       <div className="book">
@@ -17,7 +19,7 @@ class Book extends Component {
             style={{
               width: 128,
               height: 192,
-              backgroundImage: `url(${cover}`,
+              backgroundImage: `url(${cover})`,
             }}
           />
           <div className="book-shelf-changer">
@@ -31,10 +33,17 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{title}</div>
-        <div className="book-authors">{authors.join(', ')}</div>
+        <div className="book-authors">{authors ? authors.join(', ') : ''}</div>
       </div>
     );
   }
 }
+
+Book.propTypes = {
+  title: PropTypes.string.isRequired,
+  authors: PropTypes.array.isRequired,
+  cover: PropTypes.string.isRequired,
+  shelf: PropTypes.string.isRequired,
+};
 
 export default Book;

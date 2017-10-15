@@ -13,13 +13,12 @@ class SearchBooks extends Component {
 
   searchBooks = _.debounce(() => {
     const q = this.state.query.trim();
+    console.log('query is', q);
 
     if( q ) {
+      console.log('request search');
       BooksAPI.search(q)
-        .then(books => this.setState({ books }))
-        .catch(() => {
-          this.setState({ books: [] });
-        });
+        .then(books => this.mergeBooks(books))
     } else {
       this.setState({ books: [] });
     }
@@ -35,7 +34,27 @@ class SearchBooks extends Component {
     this.props.onChangeBookShelf(book, shelf);
   }
 
+  mergeBooks = (books) => {
+    const { allBooks } = this.props;
+    console.log('merge allBooks', allBooks);
+    console.log('merge books before', books);
+
+    const booksLength = books.length;
+    const allBooksLength = allBooks.length;
+    for (let i = 0; i < booksLength; i++) {
+      for (let j = 0; j < allBooksLength; j++) {
+        if( books[i].id == allBooks[j].id ) {
+          books[i].shelf = allBooks[j].shelf;
+          break;
+        }
+      }
+    };
+    console.log('setState books', books);
+    this.setState({ books }, () => console.log('merge books after'));
+  }
+
   render() {
+    console.log('render', this.state.books);
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -66,7 +85,10 @@ class SearchBooks extends Component {
             {(this.state.books.map(book => (
               <li key={book.id}>
                 <Book
-                  book={book}
+                  title={book.title}
+                  authors={book.authors || []}
+                  cover={book.imageLinks ? book.imageLinks.thumbnail : 'http://via.placeholder.com/128x193?text=No%20Cover'}
+                  shelf={book.shelf || 'none'}
                   onChangeShelf={shelf => this.updateBook(book, shelf)}
                 />
               </li>
