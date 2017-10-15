@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Book from './Book';
+import BooksGrid from './BooksGrid';
 
 function Bookshelf(props) {
   const { shelf, books, onChangeBookShelf } = props;
@@ -9,19 +9,10 @@ function Bookshelf(props) {
     <div className="bookshelf">
       <h2 className="bookshelf-title">{shelf}</h2>
       <div className="bookshelf-books">
-        <ol className="books-grid">
-          {(books.map(book => (
-            <li key={book.id}>
-              <Book
-                title={book.title}
-                authors={book.authors || []}
-                cover={book.imageLinks ? book.imageLinks.thumbnail : 'http://via.placeholder.com/128x193?text=No%20Cover'}
-                shelf={book.shelf || 'none'}
-                onChangeShelf={shelf => onChangeBookShelf(book, shelf)}
-              />
-            </li>
-          )))}
-        </ol>
+        <BooksGrid
+          books={books}
+          onChangeBooksShelf={onChangeBookShelf}
+        />
       </div>
     </div>
   );

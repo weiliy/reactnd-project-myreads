@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import * as BooksAPI from './BooksAPI';
-import Book from './Book';
+import BooksGrid from './BooksGrid';
 
 class SearchBooks extends Component {
 
@@ -43,7 +43,7 @@ class SearchBooks extends Component {
     const allBooksLength = allBooks.length;
     for (let i = 0; i < booksLength; i++) {
       for (let j = 0; j < allBooksLength; j++) {
-        if( books[i].id == allBooks[j].id ) {
+        if( books[i].id === allBooks[j].id ) {
           books[i].shelf = allBooks[j].shelf;
           break;
         }
@@ -81,19 +81,10 @@ class SearchBooks extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">
-            {(this.state.books.map(book => (
-              <li key={book.id}>
-                <Book
-                  title={book.title}
-                  authors={book.authors || []}
-                  cover={book.imageLinks ? book.imageLinks.thumbnail : 'http://via.placeholder.com/128x193?text=No%20Cover'}
-                  shelf={book.shelf || 'none'}
-                  onChangeShelf={shelf => this.updateBook(book, shelf)}
-                />
-              </li>
-            )))}
-          </ol>
+          <BooksGrid
+            books={this.state.books}
+            onChangeBookShelf={this.updateBook}
+          />
         </div>
       </div>
     );
