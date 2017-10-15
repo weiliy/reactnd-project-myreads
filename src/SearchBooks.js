@@ -16,7 +16,13 @@ class SearchBooks extends Component {
 
     if( q ) {
       BooksAPI.search(q)
-        .then(books => this.mergeBooks(books))
+        .then(books => { 
+          if ( !books.error ) {
+            this.mergeBooks(books)
+          } else {
+            this.setState({ books: [] });
+          }
+        })
     } else {
       this.setState({ books: [] });
     }
