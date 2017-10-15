@@ -11,7 +11,7 @@ function Bookshelf(props) {
       <div className="bookshelf-books">
         <BooksGrid
           books={books}
-          onChangeBooksShelf={onChangeBookShelf}
+          onChangeBookShelf={onChangeBookShelf}
         />
       </div>
     </div>
