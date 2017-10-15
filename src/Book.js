@@ -8,7 +8,6 @@ class Book extends Component {
   }
 
   render() {
-    console.log('book:', this.props);
     const { title, authors, cover, shelf } = this.props;
 
     return (

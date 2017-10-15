@@ -13,10 +13,8 @@ class SearchBooks extends Component {
 
   searchBooks = _.debounce(() => {
     const q = this.state.query.trim();
-    console.log('query is', q);
 
     if( q ) {
-      console.log('request search');
       BooksAPI.search(q)
         .then(books => this.mergeBooks(books))
     } else {
@@ -36,8 +34,6 @@ class SearchBooks extends Component {
 
   mergeBooks = (books) => {
     const { allBooks } = this.props;
-    console.log('merge allBooks', allBooks);
-    console.log('merge books before', books);
 
     const booksLength = books.length;
     const allBooksLength = allBooks.length;
@@ -49,12 +45,10 @@ class SearchBooks extends Component {
         }
       }
     };
-    console.log('setState books', books);
-    this.setState({ books }, () => console.log('merge books after'));
+    this.setState({ books });
   }
 
   render() {
-    console.log('render', this.state.books);
     return (
       <div className="search-books">
         <div className="search-books-bar">
